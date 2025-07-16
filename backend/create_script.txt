@@ -1,0 +1,47 @@
+-- Remove conflicting tables (SQLite does not support CASCADE on DROP TABLE)
+DROP TABLE IF EXISTS category;
+DROP TABLE IF EXISTS has_category;
+DROP TABLE IF EXISTS is_parent_of;
+DROP TABLE IF EXISTS is_spouse_of;
+DROP TABLE IF EXISTS person;
+
+-- Create Tables
+CREATE TABLE category (
+    category_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE person (
+    person_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    surname TEXT NOT NULL,
+    date_of_birth DATE NOT NULL,
+    date_of_death DATE,
+    image TEXT,
+    short_description TEXT NOT NULL
+);
+
+CREATE TABLE has_category (
+    category_id INTEGER NOT NULL,
+    person_id INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    PRIMARY KEY (category_id, person_id),
+    FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE,
+    FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE
+);
+
+CREATE TABLE is_parent_of (
+    parent_id INTEGER NOT NULL,
+    child_id INTEGER NOT NULL,
+    PRIMARY KEY (parent_id, child_id),
+    FOREIGN KEY (parent_id) REFERENCES person (person_id) ON DELETE CASCADE,
+    FOREIGN KEY (child_id) REFERENCES person (person_id) ON DELETE CASCADE
+);
+
+CREATE TABLE is_spouse_of (
+    wife_id INTEGER NOT NULL,
+    husband_id INTEGER NOT NULL,
+    PRIMARY KEY (wife_id, husband_id),
+    FOREIGN KEY (wife_id) REFERENCES person (person_id) ON DELETE CASCADE,
+    FOREIGN KEY (husband_id) REFERENCES person (person_id) ON DELETE CASCADE
+);
