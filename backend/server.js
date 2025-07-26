@@ -55,10 +55,9 @@ app.get('/api/categories/:id', async (req, res) => {
     res.json(category);
 });
 
-app.get('/api/categories', async (req, res) => {
+app.get('/api/categories/:name', async (req, res) => {
     const db = await dbPromise;
-    const { name } = req.query;
-    const categories = await db.all('SELECT * FROM category WHERE name=?', [name]);
+    const categories = await db.all('SELECT * FROM category WHERE name=?', [req.params.name]);
     if ( categories.length === 0 ) {
         return res.status(404).json({ error: "Categories not found" });
     }
