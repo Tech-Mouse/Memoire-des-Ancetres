@@ -1,43 +1,20 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import PersonRelation from './PersonRelation.vue';
 import Category from './Category.vue';
+import Link from './page/Link.vue';
 
 const images = "../src/assets/img/";
 
 const props = defineProps({
-    person_id: {
-        type: String
-    }
+    person: Object,
+    parents: Array,
+    spouses: Array,
+    children: Array,
+    categories: Array
 });
 
-let categories = ref(null);
-let spouses = ref(null);
-let person = ref(null);
-
-onMounted(async () => {
-    try {
-      const res = await fetch('http://localhost:3000/api/people/' + props.person_id);
-      person.value = await res.json();
-    } catch (e) {
-      console.error("Error fetching person: " + e);
-    }
-
-    try {
-      const res = await fetch('http://localhost:3000/api/people/' + props.person_id + '/categories');
-      categories.value = await res.json();
-    } catch (e) {
-      console.error("Error fetching categories: " + e);
-    }
-
-    try {
-      const res = await fetch('http://localhost:3000/api/people/' + props.person_id + '/spouses');
-      spouses.value = await res.json();
-    } catch (e) {
-      console.error("Error fetching spouses: " + e);
-    }
-
-    person.photo ? person.photo : 'template_person.png';
-  });
+props.person.photo ? props.person.photo : 'template_person.png';
 </script>
 
 <template>
@@ -56,19 +33,14 @@ onMounted(async () => {
                                 <span class="content--info--personal--dates--death">{{ person.date_of_death }}</span>
                             </div>
                         </div>
-                        <div v-if="spouses" class="content--info--personal spouse" v-for="spouse in spouses" :key="spouse.person_id">
-                            <p>Spouse:</p>
-                            <div class="content--info--personal--name">
-                                {{ spouse.name + ' ' + spouse.surname }}
-                            </div>
-                            <div class="content--info--personal--dates">
-                                <span class="content--info--personal--dates--birth">{{ spouse.date_of_birth }}</span>
-                                <span class="content--info--personal--dates--death">{{ spouse.date_of_death }}</span>
-                            </div>
-                        </div>
+
+                        <PersonRelation :to-display="parents" to-display-info="Parents" />
+
+                        <PersonRelation :to-display="spouses"  to-display-info="Spouses"/>
+                        <PersonRelation :to-display="children" to-display-info="Children" />
                     </div>
                 </main>
-                <Category v-if="categories" v-for="category in categories" :key="category.category_id" :name="category.name" :value="category.text" />
+                <Category v-if="categories && categories.length" v-for="category in categories" :key="category.category_id" :name="category.name" :value="category.text" />
             </div>    
         </div>
     </section>
@@ -121,7 +93,7 @@ onMounted(async () => {
                 flex-direction: column;
                 gap: 0.5rem;
 
-                &.spouse {
+                &.person {
                     font-size: 15pt;
 
                     p {

@@ -28,7 +28,6 @@
 
     .goodbye {
         margin-top: 0.5rem;
-        font-family: "Kunstler Script";
         font-size: 30pt;
     }
 

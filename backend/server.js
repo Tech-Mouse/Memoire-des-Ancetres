@@ -69,7 +69,7 @@ app.get('/api/people/:id/categories', async (req, res) => {
     const db = await dbPromise;
     const categories = await db.all('SELECT category.name, person.person_id, has_category.text FROM category JOIN has_category USING(category_id) JOIN person USING(person_id) WHERE person.person_id=?', [req.params.id]);
     if ( categories.length === 0 ) {
-        return res.status(404).json({ error: "Categories not found" });
+        return res.status(200).json([]);
     }
     res.json(categories);
 });
@@ -79,7 +79,7 @@ app.get('/api/people/:id/parents', async (req, res) => {
     const db = await dbPromise;
     const parents = await db.all('SELECT parent.* FROM person AS child JOIN is_parent_of ON(child.person_id = child_id) JOIN person AS parent ON(parent.person_id = parent_id) WHERE child.person_id=?', [req.params.id]);
     if ( parents.length === 0 ) {
-        return res.status(404).json({ error: "Parents not found" });
+        return res.status(200).json([]);
     }
     res.json(parents);
 });
@@ -89,7 +89,7 @@ app.get('/api/people/:id/children', async (req, res) => {
     const db = await dbPromise;
     const children = await db.all('SELECT child.* FROM person AS parent JOIN is_parent_of ON(parent.person_id = parent_id) JOIN person AS child ON(child.person_id = child_id) WHERE parent.person_id=?', [req.params.id]);
     if ( children.length === 0 ) {
-        return res.status(404).json({ error: "Children not found" });
+        return res.status(200).json(children);
     }
     res.json(children);
 });
@@ -102,12 +102,16 @@ app.get('/api/people/:id/spouses', async (req, res) => {
     const spouses_as_husband = await db.all('SELECT wife.* FROM person AS husband JOIN is_spouse_of ON(husband.person_id = husband_id) JOIN person AS wife ON(wife.person_id = wife_id) WHERE husband.person_id=?', [req.params.id]);
 
     if ( spouses_as_husband.length === 0 && spouses_as_wife.length === 0 ) {
-        return res.status(404).json({ error: "Spouses not found" });
+        return res.status(200).json([]);
     }
 
     const spouses = spouses_as_wife.concat(spouses_as_husband);
 
-    res.json(spouses);
+    res.json(
+        Array.from(
+            new Map(spouses.map(spouse => [spouse.person_id, spouse])).values()
+        )
+    );
 });
 
 
