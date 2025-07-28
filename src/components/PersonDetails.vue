@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import PersonRelation from './PersonRelation.vue';
 import Category from './Category.vue';
 import Link from './page/Link.vue';
@@ -14,6 +14,10 @@ const props = defineProps({
     categories: Array
 });
 
+const dynamicFlex = computed(() => {
+    return props.spouses.length > 0 ? 'none' : 'center'
+})
+
 props.person.photo ? props.person.photo : 'template_person.png';
 </script>
 
@@ -22,23 +26,42 @@ props.person.photo ? props.person.photo : 'template_person.png';
         <div class="center">
             <div class="content">
                 <main>
-                    <img :src="images + (person.photo || 'template_person.png')" width="225" height="225">
-                    <div class="content--info">
-                        <div class="content--info--personal">
-                            <div class="content--info--personal--name">
-                                {{ person.name + ' ' + person.surname }}
+                    <PersonRelation :to-display="parents" to-display-info="Parents" />
+
+                    <div :class="dynamicFlex" class="flex">
+
+                        <div v-if="spouses && spouses.length" class="empty"></div>
+
+                        <div class="flex-inside">
+                            <div class="fit">
+                                <img :src="images + (person.photo || 'template_person.png')" width="250" height="250">
+                                <div class="content--info">
+                                    <div class="content--info--personal">
+                                        <div class="content--info--personal--name">
+                                            {{ person.name + ' ' + person.surname }}
+                                        </div>
+                                        <div class="content--info--personal--dates">
+                                            <span class="content--info--personal--dates--birth">{{ person.date_of_birth }}</span>
+                                            <span class="content--info--personal--dates--death">{{ person.date_of_death }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="content--info--personal--dates">
-                                <span class="content--info--personal--dates--birth">{{ person.date_of_birth }}</span>
-                                <span class="content--info--personal--dates--death">{{ person.date_of_death }}</span>
-                            </div>
+
+                            <div v-if="spouses && spouses.length" class="spacer-line"></div>
+
+                            <PersonRelation :to-display="spouses" to-display-info="Spouses"/>
+
                         </div>
 
-                        <PersonRelation :to-display="parents" to-display-info="Parents" />
-
-                        <PersonRelation :to-display="spouses"  to-display-info="Spouses"/>
-                        <PersonRelation :to-display="children" to-display-info="Children" />
+                        
                     </div>
+
+                    
+                    
+                        
+                        <PersonRelation :to-display="children" to-display-info="Children" />
+                    
                 </main>
                 <Category v-if="categories && categories.length" v-for="category in categories" :key="category.category_id" :name="category.name" :value="category.text" />
             </div>    
@@ -56,7 +79,8 @@ props.person.photo ? props.person.photo : 'template_person.png';
     main {
         display: flex;
         justify-content: center;
-        gap: 10rem;
+        width: 100%;
+        gap: 3rem;
         margin-bottom: 2rem;
         flex-wrap: wrap;
 
@@ -67,8 +91,20 @@ props.person.photo ? props.person.photo : 'template_person.png';
 
     img {
         border-radius: 50%;
-        align-self: flex-start;
+        max-width: 250px;
+        max-height: 250px;
+        width: 15vw;
+        height: 15vw;
         border: 1px solid $lightHighlight;
+
+        @media (max-width: $mobileTreshold) {
+            max-width: 125px;
+            max-height: 125px;
+            min-width: 100px;
+            min-height: 100px;
+            width: 20vw;
+            height: 20vw;
+        }
     }
 
     .content {
@@ -77,13 +113,15 @@ props.person.photo ? props.person.photo : 'template_person.png';
         flex-wrap: wrap;
         gap: 2rem;
         padding: 1rem;
-        max-width: 60%;
+        margin: 0 2rem;
+        width: 80%;
 
         @media (max-width: $mobileTreshold) {
             max-width: 90%;
         }
         
         &--info {
+            margin-top: 0.5rem;
             display: flex;
             flex-direction: column;
             gap: 2rem;
@@ -104,6 +142,7 @@ props.person.photo ? props.person.photo : 'template_person.png';
 
                 &--name {
                     font-size: 26pt;
+                    text-align: center;
                 }
 
                 &--dates {
@@ -136,6 +175,49 @@ props.person.photo ? props.person.photo : 'template_person.png';
             }
         }
 
+    }
+
+    .fit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: fit-content;
+        padding: 0.5rem;
+    }
+
+    .flex {
+        display: flex;
+        width: 100%;
+    }
+
+    .flex-inside {
+        display: flex;
+    }
+
+    .spacer-line {
+        position: relative;
+        flex-grow: 1;
+        width: 20vw;
+        min-width: 1%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        // padding: 0 1rem;
+
+        &::before {
+            content: "";
+            height: 2px;
+            border-top: 2px dashed $lightHighlight;
+            width: 100%;
+        }
+    }
+
+    .flex > * {
+        min-width: 0;
+    }
+
+    .empty {
+        width: 40%;
     }
 
     
