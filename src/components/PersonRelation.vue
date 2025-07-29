@@ -125,7 +125,7 @@ const dynamicCenter = computed(() => {
                     }
 
                     &--birth::before {
-                        content: 'née';
+                        content: 'né(e)';
                         position: absolute;
                         top: -10px;
                         left: -10px;
@@ -154,6 +154,7 @@ const dynamicCenter = computed(() => {
     }
 
     div.flex-around {
+        display: flex;
         justify-content: space-around;
     }
 

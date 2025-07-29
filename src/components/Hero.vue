@@ -39,6 +39,7 @@ const props = defineProps({
 
         &--page-head {
             font: 62pt bolder;
+            margin: 0 2rem;
 
             @media (max-width: $mobileTreshold) {
                 font: 50pt bolder;

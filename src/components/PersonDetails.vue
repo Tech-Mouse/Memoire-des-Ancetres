@@ -157,7 +157,7 @@ props.person.photo ? props.person.photo : 'template_person.png';
                     }
 
                     &--birth::before {
-                        content: 'née';
+                        content: 'né(e)';
                         position: absolute;
                         top: -10px;
                         left: -10px;

@@ -13,10 +13,10 @@ const props = defineProps({
         type: String
     },
     birth: {
-        type: String
+        type: [String, Number]
     },
     death: {
-        type: String
+        type: [String, Number]
     },
     info: {
         type: String
@@ -102,7 +102,7 @@ const props = defineProps({
                 }
 
                 &--birth::before {
-                    content: 'née';
+                    content: 'né(e)';
                     position: absolute;
                     top: -10px;
                     left: -10px;

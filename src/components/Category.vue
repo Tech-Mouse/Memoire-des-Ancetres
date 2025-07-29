@@ -40,7 +40,7 @@
             max-width: 100%;
             word-wrap: break-word;
             white-space: pre-wrap;
-            word-break: break-all;
+            line-height: 1.2;
         }
     }
 </style>

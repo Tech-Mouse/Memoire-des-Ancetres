@@ -34,7 +34,7 @@ const toggle = (event) => {
     <nav :class="{'open': show }" class="navigation">
         <ul class="navigation--links">
             <li><Link href="/" variant="nav">Home</Link></li>
-            <li v-for="person in people" :key="person.person_id"><Link  :href="'/person/' + person.name + ' ' + person.surname" :state="[person]" variant="nav">{{person.name + ' ' + person.surname}}</Link></li>
+            <li v-for="person in people" :key="person.person_id"><Link  :href="'/person/' + person.person_id" :state="[person]" variant="nav">{{person.name + ' ' + person.surname}}</Link></li>
         </ul>
     </nav>
     
