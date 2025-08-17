@@ -1,9 +1,11 @@
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
-
-const script = fetch("create_script.txt").then( res => res.text() ).catch(e => console.error("Could not fetch create script: " + e) )
+const fs = require("fs/promises");
+const sqlite3 = require("sqlite3");
+const { open } = require("sqlite");
 
 const setupDatabase = async () => {
+
+    const script = await fs.readFile("create_script.txt", "utf-8");
+
     const db = await open({
         filename: './db.sqlite',
         driver: sqlite3.Database
