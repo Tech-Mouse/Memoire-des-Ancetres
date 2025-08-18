@@ -34,8 +34,8 @@ const props = defineProps({
             <div class="person--details">
                 <Text>{{ name }}</Text>
                 <div class="person--details--year">
-                    <span class="person--details--year--birth">{{ birth }}</span>
-                    <span class="person--details--year--death">{{ death }}</span>
+                    <span v-if="birth && birth.length" class="person--details--year--birth">{{ birth }}</span>
+                    <span v-if="death && death.length" class="person--details--year--death">{{ death }}</span>
                 </div>
                 <div class="person--details--about">{{ info }}</div>
             </div>

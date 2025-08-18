@@ -36,7 +36,7 @@ const dynamicCenter = computed(() => {
                         {{ oneInstance.name + ' ' + oneInstance.surname }}
                     </div>
                     <div class="content--info--personal--dates">
-                        <span class="content--info--personal--dates--birth">{{ oneInstance.date_of_birth }}</span>
+                        <span v-if="oneInstance.date_of_birth && oneInstance.date_of_birth.length" class="content--info--personal--dates--birth">{{ oneInstance.date_of_birth }}</span>
                     </div>
                 </div>
                 

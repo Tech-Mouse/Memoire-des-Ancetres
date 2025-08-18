@@ -41,8 +41,8 @@ props.person.photo ? props.person.photo : 'template_person.png';
                                             {{ person.name + ' ' + person.surname }}
                                         </div>
                                         <div class="content--info--personal--dates">
-                                            <span class="content--info--personal--dates--birth">{{ person.date_of_birth }}</span>
-                                            <span class="content--info--personal--dates--death">{{ person.date_of_death }}</span>
+                                            <span v-if="person.date_of_birth && person.date_of_birth.length" class="content--info--personal--dates--birth">{{ person.date_of_birth }}</span>
+                                            <span v-if="person.date_of_death && person.date_of_death.length" class="content--info--personal--dates--death">{{ person.date_of_death }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -149,6 +149,7 @@ props.person.photo ? props.person.photo : 'template_person.png';
                     display: flex;
                     justify-content: space-around;
                     padding: 0.5rem 0;
+                    gap: 0.5rem;
 
                     span {
                         font-size: 18pt;
