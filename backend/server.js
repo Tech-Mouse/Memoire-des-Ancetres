@@ -21,7 +21,7 @@ const dbPromise = open({
 app.get('/api/people', async (req, res) => {
     const db = await dbPromise;
     const people = await db.all('SELECT * FROM person');
-    if ( people.length === 0 ) {
+    if ( Object.keys(people).length === 0 ) {
         return res.status(404).json({ error: "People not found" });
     }
     res.json(people);
@@ -112,6 +112,33 @@ app.get('/api/people/:id/spouses', async (req, res) => {
             new Map(spouses.map(spouse => [spouse.person_id, spouse])).values()
         )
     );
+});
+
+app.get('/api/cemeteries', async (req, res) => {
+    const db = await dbPromise;
+    const cemeteries = db.all('SELECT * from cemetery');
+    if ( Object.keys(cemeteries).length === 0 ) {
+        return res.status(404).json({ error: "Cemeteries not found" });
+    }
+    res.json(cemeteries);
+})
+
+app.get('/api/cemeteries/:id', async (req, res) => {
+    const db = await dbPromise;
+    const cemetery = await db.get('SELECT * FROM cemetery WHERE cemetery_id=?', [req.params.id]);
+    if ( ! cemetery ) {
+        return res.status(404).json({ error: "Cemetery not found" });
+    }
+    res.json(cemetery);
+});
+
+app.get('/api/cemeteries/:id/people', async (req, res) => {
+    const db = await dbPromise;
+    const people = await db.all('SELECT p.* FROM person p JOIN is_buried_at USING(person_id) WHERE cemetery_id=?', [req.params.id]);
+    if ( Object.keys(people).length === 0 ) {
+        return res.status(404).json({ error: "People not found" });
+    }
+    res.json(people);
 });
 
 
