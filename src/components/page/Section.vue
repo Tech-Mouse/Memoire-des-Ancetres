@@ -1,13 +1,15 @@
 <template>
-  <p><slot /></p>
+  <section>
+    <slot />
+  </section>
 </template>
 
 <style lang="scss" scoped>
-p {
-  font-size: 16px;
+section {
+  padding: 2rem 10rem;
 
   @media (max-width: $mobileTreshold) {
-    font-size: 17px;
+    padding: 2rem 2rem;
   }
 }
 </style>

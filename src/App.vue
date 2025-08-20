@@ -1,6 +1,6 @@
 <script setup>
-  import Navigation from '@/components/Navigation.vue';
-  import Foot from '@/components/Footer.vue';
+import Navigation from "@/components/Navigation.vue";
+import Foot from "@/components/Footer.vue";
 </script>
 
 <template>
@@ -8,5 +8,3 @@
   <router-view />
   <Foot />
 </template>
-
-
