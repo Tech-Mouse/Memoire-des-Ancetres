@@ -3,6 +3,7 @@ const cors = require('cors');
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
 const dotenv = require('dotenv');
+const { rateLimit } = require('express-rate-limit');
 
 dotenv.config();
 
@@ -12,11 +13,20 @@ const PORT = process.env.port || 3000;
 app.use(cors());
 app.use(express.json());
 
+const limiter = rateLimit({
+  windowMs: 1 * 1000, // 1 second
+  max: 5 // Limit each IP to 5 requests per window (1 second) per IP
+});
+
+app.use(limiter);
+
+app.use(express.json({ limit: "1kb" })); // limit request body to 1kb 
+
+
 const dbPromise = open({
     filename: './db.sqlite',
     driver: sqlite3.Database
 });
-
 
 app.get('/api/people', async (req, res) => {
     const db = await dbPromise;
