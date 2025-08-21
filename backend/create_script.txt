@@ -44,8 +44,7 @@ CREATE TABLE person (
     surname TEXT NOT NULL,
     date_of_birth TEXT NOT NULL,
     date_of_death TEXT,
-    image TEXT,
-    short_description TEXT NOT NULL
+    image TEXT
 );
 
 CREATE TABLE has_category (

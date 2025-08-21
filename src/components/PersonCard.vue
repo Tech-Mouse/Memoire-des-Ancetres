@@ -3,7 +3,7 @@ import Heading from "./page/Heading.vue";
 import Link from "./page/Link.vue";
 import Text from "./page/Text.vue";
 
-const images = "/src/assets/img/";
+const images = "/src/assets/img/people/";
 
 const props = defineProps({
   photo: {
@@ -22,9 +22,6 @@ const props = defineProps({
   },
   death: {
     type: [String, Number],
-  },
-  info: {
-    type: String,
   },
   link: {
     type: String,

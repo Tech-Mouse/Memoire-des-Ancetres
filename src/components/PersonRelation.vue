@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import Link from "./page/Link.vue";
 
-const images = "../src/assets/img/";
+const images = "../src/assets/img/people/";
 
 const props = defineProps({
   toDisplayInfo: String,
@@ -35,7 +35,7 @@ const dynamicCenter = computed(() => {
         :key="oneInstance.person_id"
       >
         <img
-          :src="images + (oneInstance.photo || 'template_person.png')"
+          :src="images + (oneInstance.image || 'template_person.png')"
           width="80"
           height="80"
         />

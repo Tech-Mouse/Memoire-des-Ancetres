@@ -4,7 +4,7 @@ import PersonRelation from "./PersonRelation.vue";
 import Category from "./Category.vue";
 import Link from "./page/Link.vue";
 
-const images = "../src/assets/img/";
+const images = "../src/assets/img/people/";
 
 const props = defineProps({
   person: Object,
@@ -17,8 +17,6 @@ const props = defineProps({
 const dynamicFlex = computed(() => {
   return props.spouses.length > 0 ? "none" : "center";
 });
-
-props.person.photo ? props.person.photo : "template_person.png";
 </script>
 
 <template>
@@ -34,7 +32,7 @@ props.person.photo ? props.person.photo : "template_person.png";
             <div class="flex-inside">
               <div class="fit">
                 <img
-                  :src="images + (person.photo || 'template_person.png')"
+                  :src="images + (person.image || 'template_person.png')"
                   width="250"
                   height="250"
                 />
