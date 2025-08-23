@@ -32,7 +32,7 @@ const dynamicFlex = computed(() => {
             <div class="flex-inside">
               <div class="fit">
                 <img
-                  :src="images + (person.image || 'template_person.png')"
+                  :src="person.image || images + ('template_person.png')"
                   width="250"
                   height="250"
                 />

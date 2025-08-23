@@ -35,7 +35,7 @@ const dynamicCenter = computed(() => {
         :key="oneInstance.person_id"
       >
         <img
-          :src="images + (oneInstance.image || 'template_person.png')"
+          :src="oneInstance.image ||  images + ('template_person.png')"
           width="80"
           height="80"
         />

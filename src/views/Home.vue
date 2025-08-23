@@ -28,7 +28,7 @@ onMounted(async () => {
         :name="person.name + ' ' + person.surname"
         :birth="person.date_of_birth"
         :death="person.date_of_death"
-        :photo="person.image ?? undefined"
+        :photo="person.image"
         :link="person.person_id.toString()"
       />
     </div>

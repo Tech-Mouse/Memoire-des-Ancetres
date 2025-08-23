@@ -31,7 +31,7 @@ const props = defineProps({
 
 <template>
   <Link :href="'/person/' + link" class="person-card">
-    <img :src="images + photo" :alt="alt" class="person-card--photo" />
+    <img :src="photo || (images + 'template_person.png')" :alt="alt" class="person-card--photo" />
     <div class="person-card--information">
       <Heading as="h5" pb="1.5" innerClass="person-card--header">{{
         name
