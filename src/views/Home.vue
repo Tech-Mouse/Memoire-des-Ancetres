@@ -33,9 +33,6 @@ onMounted(async () => {
       />
     </div>
   </Section>
-  <!-- <section>
-    <PersonCardCompact />
-  </section> -->
 </template>
 
 <style lang="scss" scoped>

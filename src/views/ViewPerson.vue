@@ -2,8 +2,10 @@
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import Hero from "@/components/Hero.vue";
-import PersonDetails from "@/components/PersonDetails.vue";
+import PersonDetail from "../components/PersonDetails.vue";
 import Section from "../components/page/Section.vue";
+import Heading from "../components/page/Heading.vue";
+import Category from "../components/Category.vue";
 
 const route = useRoute();
 const person_id = ref(route.params.person_id);
@@ -69,7 +71,7 @@ watch(
   <div v-if="person">
     <Hero :text="person.name + ' ' + person.surname" />
     <Section>
-      <PersonDetails
+      <PersonDetail
         :person="person"
         :parents="parents"
         :spouses="spouses"
@@ -77,6 +79,16 @@ watch(
         :children="children"
       />
     </Section>
+    <Section v-if="categories && categories.length">
+      <Category
+        v-for="category in categories"
+        :key="category.category_id"
+        :name="category.name"
+        :value="category.text"
+      />
+    </Section>
   </div>
-  <div v-else>Unknown error</div>
+  <div v-else>
+    <Section> <Heading as="h1">Person not found</Heading> </Section>
+  </div>
 </template>

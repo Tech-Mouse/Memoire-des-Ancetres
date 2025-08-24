@@ -1,10 +1,9 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import PersonRelation from "./PersonRelation.vue";
-import Category from "./Category.vue";
-import Link from "./page/Link.vue";
+import Text from "./page/Text.vue";
+import PersonCardCompact from "./PersonCardCompact.vue";
 
-const images = "../src/assets/img/people/";
+const images = "/src/assets/img/people/";
 
 const props = defineProps({
   person: Object,
@@ -20,214 +19,157 @@ const dynamicFlex = computed(() => {
 </script>
 
 <template>
-  <section v-if="person">
-    <div class="center">
-      <div class="content">
-        <main>
-          <PersonRelation :to-display="parents" to-display-info="Parents" />
-
-          <div :class="dynamicFlex" class="flex">
-            <div v-if="spouses && spouses.length" class="empty"></div>
-
-            <div class="flex-inside">
-              <div class="fit">
-                <img
-                  :src="person.image || images + ('template_person.png')"
-                  width="250"
-                  height="250"
-                />
-                <div class="content--info">
-                  <div class="content--info--personal">
-                    <div class="content--info--personal--name">
-                      {{ person.name + " " + person.surname }}
-                    </div>
-                    <div class="content--info--personal--dates">
-                      <span
-                        v-if="
-                          person.date_of_birth && person.date_of_birth.length
-                        "
-                        class="content--info--personal--dates--birth"
-                        >{{ person.date_of_birth }}</span
-                      >
-                      <span
-                        v-if="
-                          person.date_of_death && person.date_of_death.length
-                        "
-                        class="content--info--personal--dates--death"
-                        >{{ person.date_of_death }}</span
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div v-if="spouses && spouses.length" class="spacer-line"></div>
-
-              <PersonRelation :to-display="spouses" to-display-info="Spouses" />
-            </div>
-          </div>
-
-          <PersonRelation :to-display="children" to-display-info="Children" />
-        </main>
-        <Category
-          v-if="categories && categories.length"
-          v-for="category in categories"
-          :key="category.category_id"
-          :name="category.name"
-          :value="category.text"
+  <div v-if="person" class="person">
+    <!-- Parents of person -->
+    <div class="person--parents">
+      <Text>Parents:</Text>
+      <div class="person--parents--cards">
+        <PersonCardCompact
+          v-for="oneInstance in parents"
+          :key="oneInstance.person_id"
+          :photo="oneInstance.image"
+          alt=""
+          :name="oneInstance.name"
+          :link="oneInstance.person_id.toString()"
         />
       </div>
     </div>
-  </section>
+    <!-- Person with spouses -->
+    <div class="person-with-spouses">
+      <!-- Person -->
+      <div class="person--box">
+        <div class="person--card">
+          <img
+            :src="person.image || images + 'template_person.png'"
+            alt=""
+            class="person--card--photo"
+          />
+          <Text class="person--card--name">{{ person.name }}</Text>
+        </div>
+      </div>
+      <!-- Spouses -->
+      <div class="person--spouses">
+        <Text>Conjoint(e):</Text>
+        <div class="person--spouses--cards">
+          <PersonCardCompact
+            v-for="oneInstance in spouses"
+            :key="oneInstance.person_id"
+            :photo="oneInstance.image"
+            alt=""
+            :name="oneInstance.name"
+            :link="oneInstance.person_id.toString()"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- Persons children -->
+    <div class="person--children">
+      <Text>Enfant(s):</Text>
+      <div class="person--children--cards">
+        <PersonCardCompact
+          v-for="oneInstance in children"
+          :key="oneInstance.person_id"
+          :photo="oneInstance.image"
+          alt=""
+          :name="oneInstance.name"
+          :link="oneInstance.person_id.toString()"
+        />
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+.person {
+  border-radius: 10px;
+  box-shadow: 0 0 10px $shadowColor;
+  padding: 0 1rem;
 
-main {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  gap: 3rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  &--parents {
+    border-bottom: 1px solid $secondaryColor;
+    padding: 1rem 0;
 
-  @media (max-width: $mobileTreshold) {
-    gap: 5rem;
-  }
-}
-
-img {
-  border-radius: 50%;
-  max-width: 250px;
-  max-height: 250px;
-  width: 15vw;
-  height: 15vw;
-  border: 1px solid $primaryColor;
-
-  @media (max-width: $mobileTreshold) {
-    max-width: 125px;
-    max-height: 125px;
-    min-width: 100px;
-    min-height: 100px;
-    width: 20vw;
-    height: 20vw;
-  }
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 2rem;
-  padding: 1rem;
-  margin: 0 2rem;
-  width: 80%;
-
-  @media (max-width: $mobileTreshold) {
-    max-width: 90%;
-  }
-
-  &--info {
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-
-    &--personal {
+    &--cards {
+      padding-top: 1rem;
       display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-
-      &.person {
-        font-size: 15pt;
-
-        p {
-          color: $primaryColor;
-        }
-      }
-
-      &--name {
-        font-size: 26pt;
-        text-align: center;
-      }
-
-      &--dates {
-        display: flex;
-        justify-content: space-around;
-        padding: 0.5rem 0;
-        gap: 0.5rem;
-
-        span {
-          font-size: 18pt;
-          display: flex;
-          position: relative;
-        }
-
-        &--birth::before {
-          content: "né(e)";
-          position: absolute;
-          top: -10px;
-          left: -10px;
-          font-size: 8pt;
-        }
-
-        &--death::before {
-          content: "déc";
-          position: absolute;
-          top: -10px;
-          left: -10px;
-          font-size: 8pt;
-        }
-      }
+      justify-content: space-around;
     }
   }
-}
 
-.fit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: fit-content;
-  padding: 0.5rem;
-}
+  &-with-spouses {
+    display: flex;
+    justify-content: space-evenly;
+    border-bottom: 1px solid $secondaryColor;
 
-.flex {
-  display: flex;
-  width: 100%;
-}
-
-.flex-inside {
-  display: flex;
-}
-
-.spacer-line {
-  position: relative;
-  flex-grow: 1;
-  width: 20vw;
-  min-width: 1%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  // padding: 0 1rem;
-
-  &::before {
-    content: "";
-    height: 2px;
-    border-top: 2px dashed $primaryColor;
-    width: 100%;
+    @media (max-width: $mobileTreshold) {
+      flex-wrap: wrap;
+    }
   }
-}
 
-.flex > * {
-  min-width: 0;
-}
+  &--box {
+    border-right: 1px solid $secondaryColor;
+    width: 80%;
+    display: grid;
+    place-items: center;
 
-.empty {
-  width: 40%;
+    @media (max-width: $mobileTreshold) {
+      border-bottom: 1px solid $secondaryColor;
+      border-right: none;
+      width: 100%;
+    }
+  }
+
+  &--card {
+    display: block;
+    background-color: $tertiaryColor;
+    border-radius: 10px;
+    box-shadow: 0 0 10px $shadowColor;
+    margin: 1rem;
+    max-width: 75%;
+
+    &:hover {
+      .person-compact-card--name {
+        overflow: visible;
+        white-space: normal;
+        height: auto;
+      }
+    }
+
+    &--photo {
+      object-fit: cover;
+      width: 100%;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    &--name {
+      text-align: center;
+      padding: 0.3rem;
+      color: $darkText;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &--spouses {
+    padding: 1rem;
+
+    &--cards {
+      padding-top: 1rem;
+      display: grid;
+      gap: 1rem;
+    }
+  }
+
+  &--children {
+    padding: 1rem 0;
+
+    &--cards {
+      padding-top: 1rem;
+      display: flex;
+      justify-content: space-around;
+    }
+  }
 }
 </style>

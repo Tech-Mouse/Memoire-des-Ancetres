@@ -32,6 +32,7 @@ const props = defineProps({
   border-radius: 10px;
   box-shadow: 0 0 10px $shadowColor;
   padding: 1rem;
+  margin: 1.5rem 0;
   gap: 1rem;
 
   &--name {

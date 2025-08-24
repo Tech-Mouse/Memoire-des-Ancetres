@@ -8,7 +8,7 @@ const props = defineProps({
   },
   text: {
     type: String,
-    default: "Bienvenue!",
+    default: "Bienvenue",
   },
 });
 </script>

@@ -8,7 +8,6 @@ const images = "/src/assets/img/people/";
 const props = defineProps({
   photo: {
     type: String,
-    default: "template_person.png",
   },
   alt: {
     type: String,
@@ -31,7 +30,11 @@ const props = defineProps({
 
 <template>
   <Link :href="'/person/' + link" class="person-card">
-    <img :src="photo || (images + 'template_person.png')" :alt="alt" class="person-card--photo" />
+    <img
+      :src="photo || images + 'template_person.png'"
+      :alt="alt"
+      class="person-card--photo"
+    />
     <div class="person-card--information">
       <Heading as="h5" pb="1.5" innerClass="person-card--header">{{
         name
@@ -58,7 +61,7 @@ const props = defineProps({
   }
 
   &--photo {
-    max-width: 156px;
+    max-width: 100px;
     object-fit: cover;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
