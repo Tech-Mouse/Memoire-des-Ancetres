@@ -45,7 +45,27 @@ const dynamicFlex = computed(() => {
             alt=""
             class="person--card--photo"
           />
-          <Text class="person--card--name">{{ person.name + ' ' + person.surname }}</Text>
+          <Text class="person--card--name">{{
+            person.name + " " + person.surname
+          }}</Text>
+          <div
+            v-if="
+              (person.date_of_birth && person.date_of_birth.length > 0) ||
+              (person.date_of_death && person.date_of_death.length > 0)
+            "
+            class="person--card--year"
+          >
+            <Text
+              v-if="person.date_of_birth && person.date_of_birth.length > 0"
+              class="person--card--year__dob"
+              >{{ person.date_of_birth }}</Text
+            >
+            <Text
+              v-if="person.date_of_death && person.date_of_death.length > 0"
+              class="person--card--year__dod"
+              >{{ person.date_of_death }}</Text
+            >
+          </div>
         </div>
       </div>
       <!-- Spouses -->
@@ -150,6 +170,29 @@ const dynamicFlex = computed(() => {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    &--year {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      position: relative;
+      margin-top: 1rem;
+      font-size: 16px;
+
+      &__dob:before {
+        content: "né(e):";
+        position: absolute;
+        top: -15px;
+        font-size: 10px;
+      }
+
+      &__dod:before {
+        content: "déc.:";
+        position: absolute;
+        top: -15px;
+        font-size: 10px;
+      }
     }
   }
 
