@@ -1,5 +1,5 @@
 export async function getAllPeople() {
-    const people = await fetch("/db/person.json")
+    const people = await fetch("/Memoire-des-Ancetres/db/person.json")
     .then(res => res.json())
     .catch(e => { console.error(e)});
     return people;
@@ -11,7 +11,7 @@ export async function getPersonById(id) {
 }
 
 async function getCategories() {
-    const categories = await fetch("/db/category.json")
+    const categories = await fetch("/Memoire-des-Ancetres/db/category.json")
     .then(res => res.json())
     .catch(e => {console.error(e)});
     return categories;
@@ -29,7 +29,7 @@ async function getCategoryByName(name) {
 }
 
 async function getHasCategories() {
-    const hasCategories = await fetch("/db/has_category.json")
+    const hasCategories = await fetch("/Memoire-des-Ancetres/db/has_category.json")
     .then(res => res.json())
     .catch(e => { console.error(e)});
     return hasCategories;
@@ -57,7 +57,7 @@ export async function getPersonCategories(personId) {
 }
 
 async function getIsParentOf() {
-    const isParentOf = await fetch("/db/is_parent_of.json")
+    const isParentOf = await fetch("/Memoire-des-Ancetres/db/is_parent_of.json")
     .then(res => res.json())
     .catch(e => { console.error(e)});
     return isParentOf;
@@ -107,7 +107,7 @@ export async function getChildren(personId) {
 }
 
 async function getIsSpouseOf() {
-    const isSpouses = await fetch("/db/is_spouse_of.json")
+    const isSpouses = await fetch("/Memoire-des-Ancetres/db/is_spouse_of.json")
     .then(res => res.json())
     .catch(e => { console.error(e)});
     return isSpouses;
@@ -147,7 +147,7 @@ export async function getSpouses(personId) {
 }
 
 export async function getAllCemeteries() {
-    const cemeteries = await fetch("/db/cemetery.json")
+    const cemeteries = await fetch("/Memoire-des-Ancetres/db/cemetery.json")
     .then(res => res.json())
     .catch(e => { console.error(e)});
     return cemeteries;
@@ -159,7 +159,7 @@ export async function getCemeteryById(id) {
 }
 
 async function getIsBuriedAt() {
-    const isBuriedAt = await fetch("/db/is_buried_at.json")
+    const isBuriedAt = await fetch("/Memoire-des-Ancetres/db/is_buried_at.json")
     .then(res => res.json())
     .catch(e => { console.error(e)});
     return isBuriedAt;

@@ -30,23 +30,10 @@ const fetchPerson = async (id) => {
 
     spouses.value = await getSpouses(id);
 
-    // const resSpouses = await fetch(
-    //   `http://localhost:3000/api/people/${id}/spouses`
-    // );
-    // if (resSpouses.ok) {
-    //   spouses.value = (await resSpouses.json()).filter((s) => s.person_id);
-    // } else {
-    //   spouses.value = [];
-    // }
-
     categories.value = await getPersonCategories(id);
 
     children.value = await getChildren(id);
 
-    // const resChildren = await fetch(
-    //   `http://localhost:3000/api/people/${id}/children`
-    // );
-    // children.value = await resChildren.json();
   } catch (e) {
     console.error("Error fetching person: " + e);
   }
