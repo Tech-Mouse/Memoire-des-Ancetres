@@ -23,7 +23,7 @@ const dynamicFlex = computed(() => {
     <!-- Parents of person -->
     <div class="person--parents">
       <Text>Parents:</Text>
-      <div class="person--parents--cards">
+      <div v-if="parents.length > 0" class="person--parents--cards">
         <PersonCardCompact
           v-for="oneInstance in parents"
           :key="oneInstance.person_id"
@@ -33,6 +33,7 @@ const dynamicFlex = computed(() => {
           :link="oneInstance.person_id.toString()"
         />
       </div>
+      <Text v-else>Pas d'information sur les parents</Text>
     </div>
     <!-- Person with spouses -->
     <div class="person-with-spouses">

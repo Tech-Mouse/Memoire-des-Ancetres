@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import Hero from "@/components/Hero.vue";
-import PersonDetail from "../components/PersonDetails.vue";
+import PersonDetails from "../components/PersonDetails.vue";
 import Section from "../components/page/Section.vue";
 import Heading from "../components/page/Heading.vue";
 import Category from "../components/Category.vue";
@@ -71,7 +71,7 @@ watch(
   <div v-if="person">
     <Hero :text="person.name + ' ' + person.surname" />
     <Section>
-      <PersonDetail
+      <PersonDetails
         :person="person"
         :parents="parents"
         :spouses="spouses"
