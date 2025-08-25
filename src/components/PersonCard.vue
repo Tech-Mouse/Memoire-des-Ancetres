@@ -31,7 +31,7 @@ const props = defineProps({
 <template>
   <Link :href="'/person/' + link" class="person-card">
     <img
-      :src="photo || images + 'template_person.png'"
+      :src="photo || images + 'template_person.svg'"
       :alt="alt"
       class="person-card--photo"
     />

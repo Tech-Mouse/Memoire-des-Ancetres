@@ -40,7 +40,7 @@ const dynamicFlex = computed(() => {
       <div class="person--box">
         <div class="person--card">
           <img
-            :src="person.image || images + 'template_person.png'"
+            :src="person.image || images + 'template_person.svg'"
             alt=""
             class="person--card--photo"
           />
