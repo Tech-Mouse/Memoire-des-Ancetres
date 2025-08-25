@@ -3,7 +3,7 @@ import Heading from "./page/Heading.vue";
 import Link from "./page/Link.vue";
 import Text from "./page/Text.vue";
 
-const images = "/src/assets/img/people/";
+const images = "/Memoire-des-Ancetres/src/assets/img/people/";
 
 const props = defineProps({
   photo: {
