@@ -6,12 +6,12 @@ import Heading from "./page/Heading.vue";
 const people = ref([]);
 
 onMounted(async () => {
-  try {
-    const res = await fetch("http://localhost:3000/api/people");
-    people.value = await res.json();
-  } catch (e) {
-    console.error("Error fetching people: " + e);
-  }
+  // try {
+  //   const res = await fetch("http://localhost:3000/api/people");
+  //   people.value = await res.json();
+  // } catch (e) {
+  //   console.error("Error fetching people: " + e);
+  // }
 });
 
 const show = ref(false);

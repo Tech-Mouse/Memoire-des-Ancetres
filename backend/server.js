@@ -1,162 +1,188 @@
-const express = require('express');
-const cors = require('cors');
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
-const dotenv = require('dotenv');
-const { rateLimit } = require('express-rate-limit');
+export async function getAllPeople() {
+    const people = await fetch("/db/person.json")
+    .then(res => res.json())
+    .catch(e => { console.error(e)});
+    return people;
+}
 
-dotenv.config();
+export async function getPersonById(id) {
+    const people = await getAllPeople();
+    return people.find(person => person.person_id == id);
+}
 
-const app = express();
-const PORT = process.env.port || 3000;
+async function getCategories() {
+    const categories = await fetch("/db/category.json")
+    .then(res => res.json())
+    .catch(e => {console.error(e)});
+    return categories;
+    
+}
 
-app.use(cors());
-app.use(express.json());
+async function getCategoryById(id) {
+    const categories = await getCategories();
+    return categories.find(category => category.category_id == id);
+}
 
-const limiter = rateLimit({
-  windowMs: 1 * 1000, // 1 second
-  max: 30 // Limit each IP to 30 requests per window (1 second) per IP
-});
+async function getCategoryByName(name) {
+    const categories = await getCategories();
+    return categories.find(category => category.name == name);
+}
 
-app.use(limiter);
+async function getHasCategories() {
+    const hasCategories = await fetch("/db/has_category.json")
+    .then(res => res.json())
+    .catch(e => { console.error(e)});
+    return hasCategories;
+}
 
-app.use(express.json({ limit: "1kb" })); // limit request body to 1kb 
+async function getPersonHasCategories(personId) {
+    const hasCategories = await getHasCategories();
+    return hasCategories.filter(entry => entry.person_id == personId);
+}
 
+export async function getPersonCategories(personId) {
+    const personCategories = await getPersonHasCategories(personId);
+    const categories = await getCategories();
 
-const dbPromise = open({
-    filename: './db.sqlite',
-    driver: sqlite3.Database
-});
+    let validCategories = [];
 
-app.get('/api/people', async (req, res) => {
-    const db = await dbPromise;
-    const people = await db.all('SELECT * FROM person');
-    if ( Object.keys(people).length === 0 ) {
-        return res.status(404).json({ error: "People not found" });
+    for (const category of categories) {
+        for (const personCategory of personCategories) {
+            if (category.category_id == personCategory.category_id) {
+                validCategories.push({"category_id" : category.category_id, "name" : category.name, "text" : personCategory.text});
+            }
+        }
     }
-    res.json(people);
-});
+    return validCategories;
+}
 
-app.get('/api/people/:id', async (req, res) => {
-    const db = await dbPromise;
-    const person = await db.get('SELECT * FROM person WHERE person_id=?', [req.params.id]);
-    if ( ! person ) {
-        return res.status(404).json({ error: "Person not found" });
-    }
-    res.json(person);
-});
+async function getIsParentOf() {
+    const isParentOf = await fetch("/db/is_parent_of.json")
+    .then(res => res.json())
+    .catch(e => { console.error(e)});
+    return isParentOf;
+}
 
-app.get('/api/categories', async (req, res) => {
-    const db = await dbPromise;
-    const categories = await db.all('SELECT * FROM category');
-    if ( categories.length === 0 ) {
-        return res.status(404).json({ error: "Categories not found" });
-    }
-    res.json(categories);
-});
+async function getIsParentOfPerson(personId) {
+    const personParents = await getIsParentOf();
+    return personParents.filter(entry => entry.child_id == personId);
+}
 
+export async function getParents(personId) {
+    const parentEntries = await getIsParentOfPerson(personId);
+    const people = await getAllPeople();
 
-app.get('/api/categories/:id', async (req, res) => {
-    const db = await dbPromise;
-    const category = await db.get('SELECT * FROM category WHERE category_id=?', [req.params.id]);
-    if ( ! category ) {
-        return res.status(404).json({ error: "Category not found" });
-    }
-    res.json(category);
-});
+    let parents = [];
 
-app.get('/api/categories/:name', async (req, res) => {
-    const db = await dbPromise;
-    const categories = await db.all('SELECT * FROM category WHERE name=?', [req.params.name]);
-    if ( categories.length === 0 ) {
-        return res.status(404).json({ error: "Categories not found" });
-    }
-    res.json(categories);
-});
-
-
-app.get('/api/people/:id/categories', async (req, res) => {
-    const db = await dbPromise;
-    const categories = await db.all('SELECT category.name, person.person_id, has_category.text FROM category JOIN has_category USING(category_id) JOIN person USING(person_id) WHERE person.person_id=?', [req.params.id]);
-    if ( categories.length === 0 ) {
-        return res.status(200).json([]);
-    }
-    res.json(categories);
-});
-
-
-app.get('/api/people/:id/parents', async (req, res) => {
-    const db = await dbPromise;
-    const parents = await db.all('SELECT parent.* FROM person AS child JOIN is_parent_of ON(child.person_id = child_id) JOIN person AS parent ON(parent.person_id = parent_id) WHERE child.person_id=?', [req.params.id]);
-    if ( parents.length === 0 ) {
-        return res.status(200).json([]);
-    }
-    res.json(parents);
-});
-
-
-app.get('/api/people/:id/children', async (req, res) => {
-    const db = await dbPromise;
-    const children = await db.all('SELECT child.* FROM person AS parent JOIN is_parent_of ON(parent.person_id = parent_id) JOIN person AS child ON(child.person_id = child_id) WHERE parent.person_id=?', [req.params.id]);
-    if ( children.length === 0 ) {
-        return res.status(200).json(children);
-    }
-    res.json(children);
-});
-
-
-app.get('/api/people/:id/spouses', async (req, res) => {
-    const db = await dbPromise;
-    const spouses_as_wife = await db.all('SELECT husband.* FROM person AS wife JOIN is_spouse_of ON(wife.person_id = wife_id) JOIN person AS husband ON(husband.person_id = husband_id) WHERE wife.person_id=?', [req.params.id]);
-
-    const spouses_as_husband = await db.all('SELECT wife.* FROM person AS husband JOIN is_spouse_of ON(husband.person_id = husband_id) JOIN person AS wife ON(wife.person_id = wife_id) WHERE husband.person_id=?', [req.params.id]);
-
-    if ( spouses_as_husband.length === 0 && spouses_as_wife.length === 0 ) {
-        return res.status(200).json([]);
+    for (const parentEntry of parentEntries) {
+        for (const person of people) {
+            if (parentEntry.parent_id == person.person_id) {
+                parents.push(person);
+            }
+        }
     }
 
-    const spouses = spouses_as_wife.concat(spouses_as_husband);
+    return parents;
+}
 
-    res.json(
-        Array.from(
-            new Map(spouses.map(spouse => [spouse.person_id, spouse])).values()
-        )
-    );
-});
+async function getIsChildOfPerson(personId) {
+    const isParent = await getIsParentOf();
+    return isParent.filter(entry => entry.parent_id == personId);
+}
 
-app.get('/api/cemeteries', async (req, res) => {
-    const db = await dbPromise;
-    const cemeteries = db.all('SELECT * from cemetery');
-    if ( Object.keys(cemeteries).length === 0 ) {
-        return res.status(404).json({ error: "Cemeteries not found" });
+export async function getChildren(personId) {
+    const childrenEntries = await getIsChildOfPerson(personId);
+    const people = await getAllPeople();
+
+    let children = [];
+
+    for (const childrenEntry of childrenEntries) {
+        for (const person of people) {
+            if (childrenEntry.child_id == person.person_id) {
+                children.push(person);
+            }
+        }
     }
-    res.json(cemeteries);
-})
+    return children;
+}
 
-app.get('/api/cemeteries/:id', async (req, res) => {
-    const db = await dbPromise;
-    const cemetery = await db.get('SELECT * FROM cemetery WHERE cemetery_id=?', [req.params.id]);
-    if ( ! cemetery ) {
-        return res.status(404).json({ error: "Cemetery not found" });
+async function getIsSpouseOf() {
+    const isSpouses = await fetch("/db/is_spouse_of.json")
+    .then(res => res.json())
+    .catch(e => { console.error(e)});
+    return isSpouses;
+}
+
+async function getSpouseEntriesAsWife(personId) {
+    const allSpouses = await getIsSpouseOf();
+    return allSpouses.filter(entry => entry.wife_id == personId);
+}
+
+async function getSpouseEntriesAsHusband(personId) {
+    const allSpouses = await getIsSpouseOf();
+    return allSpouses.filter(entry => entry.husband_id == personId);
+}
+
+
+export async function getSpouses(personId) {
+    const spousesAsWife = await getSpouseEntriesAsWife(personId);
+    const spousesAsHusband = await getSpouseEntriesAsHusband(personId);
+
+    const spouseIds = Array.from(spousesAsWife.map(entry => entry.husband_id));
+
+    spouseIds.push(...spousesAsHusband.map(entry => entry.wife_id));
+
+    const uniqueIds = [...new Set(spouseIds)];
+
+    const allSpouses = [];
+
+    for (const id of uniqueIds) {
+        const person = await getPersonById(id);
+        if (person) {
+            allSpouses.push(person);
+        }
     }
-    res.json(cemetery);
-});
 
-app.get('/api/cemeteries/:id/people', async (req, res) => {
-    const db = await dbPromise;
-    const people = await db.all('SELECT p.* FROM person p JOIN is_buried_at USING(person_id) WHERE cemetery_id=?', [req.params.id]);
-    if ( Object.keys(people).length === 0 ) {
-        return res.status(404).json({ error: "People not found" });
+    return allSpouses;
+}
+
+export async function getAllCemeteries() {
+    const cemeteries = await fetch("/db/cemetery.json")
+    .then(res => res.json())
+    .catch(e => { console.error(e)});
+    return cemeteries;
+}
+
+export async function getCemeteryById(id) {
+    const cemeteries = await getAllCemeteries();
+    return cemeteries.find(cemetery => cemetery.cemetery_id == id);
+}
+
+async function getIsBuriedAt() {
+    const isBuriedAt = await fetch("/db/is_buried_at.json")
+    .then(res => res.json())
+    .catch(e => { console.error(e)});
+    return isBuriedAt;
+}
+
+async function getIsBuriedOnCemetery(cemeteryId) {
+    const allEntries = await getIsBuriedAt();
+    return allEntries.filter(entry => entry.cemetery_id == cemeteryId);
+}
+
+export async function getPeopleAtCemetery(cemeteryId) {
+    const people = await getAllPeople();
+    const peopleCemeteryEntries = await getIsBuriedAtCemetery();
+
+    const buriedPeople = [];
+
+    for (const burialEntry of peopleCemeteryEntries) {
+        for (const person of people) {
+            if (burialEntry.person_id == person.person_id) {
+                buriedPeople.push(person);
+            }
+        }
     }
-    res.json(people);
-});
 
-
-
-
-
-
-
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+    return buriedPeople;
+}

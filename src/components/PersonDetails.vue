@@ -29,7 +29,7 @@ const dynamicFlex = computed(() => {
           :key="oneInstance.person_id"
           :photo="oneInstance.image"
           alt=""
-          :name="oneInstance.name"
+          :name="oneInstance.name + ' ' + oneInstance.surname"
           :link="oneInstance.person_id.toString()"
         />
       </div>
@@ -45,7 +45,7 @@ const dynamicFlex = computed(() => {
             alt=""
             class="person--card--photo"
           />
-          <Text class="person--card--name">{{ person.name }}</Text>
+          <Text class="person--card--name">{{ person.name + ' ' + person.surname }}</Text>
         </div>
       </div>
       <!-- Spouses -->
@@ -57,7 +57,7 @@ const dynamicFlex = computed(() => {
             :key="oneInstance.person_id"
             :photo="oneInstance.image"
             alt=""
-            :name="oneInstance.name"
+            :name="oneInstance.name + ' ' + oneInstance.surname"
             :link="oneInstance.person_id.toString()"
           />
         </div>
@@ -72,7 +72,7 @@ const dynamicFlex = computed(() => {
           :key="oneInstance.person_id"
           :photo="oneInstance.image"
           alt=""
-          :name="oneInstance.name"
+          :name="oneInstance.name + ' ' + oneInstance.surname"
           :link="oneInstance.person_id.toString()"
         />
       </div>

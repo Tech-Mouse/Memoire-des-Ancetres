@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
+import { getParents, getPersonById, getPersonCategories, getSpouses, getChildren } from "../../backend/server.js";
 import Hero from "@/components/Hero.vue";
 import PersonDetails from "../components/PersonDetails.vue";
 import Section from "../components/page/Section.vue";
@@ -18,36 +19,34 @@ const children = ref([]);
 
 const fetchPerson = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/people/${id}`);
-    if (res.ok) {
-      person.value = await res.json();
+    const res = await getPersonById(id);
+    if (res) {
+      person.value = res;
     } else {
       throw "Person with id " + id + " not found";
     }
 
-    const resParents = await fetch(
-      `http://localhost:3000/api/people/${id}/parents`
-    );
-    parents.value = await resParents.json();
+    parents.value = await getParents(id); 
 
-    const resSpouses = await fetch(
-      `http://localhost:3000/api/people/${id}/spouses`
-    );
-    if (resSpouses.ok) {
-      spouses.value = (await resSpouses.json()).filter((s) => s.person_id);
-    } else {
-      spouses.value = [];
-    }
+    spouses.value = await getSpouses(id);
 
-    const resCategories = await fetch(
-      `http://localhost:3000/api/people/${id}/categories`
-    );
-    categories.value = await resCategories.json();
+    // const resSpouses = await fetch(
+    //   `http://localhost:3000/api/people/${id}/spouses`
+    // );
+    // if (resSpouses.ok) {
+    //   spouses.value = (await resSpouses.json()).filter((s) => s.person_id);
+    // } else {
+    //   spouses.value = [];
+    // }
 
-    const resChildren = await fetch(
-      `http://localhost:3000/api/people/${id}/children`
-    );
-    children.value = await resChildren.json();
+    categories.value = await getPersonCategories(id);
+
+    children.value = await getChildren(id);
+
+    // const resChildren = await fetch(
+    //   `http://localhost:3000/api/people/${id}/children`
+    // );
+    // children.value = await resChildren.json();
   } catch (e) {
     console.error("Error fetching person: " + e);
   }

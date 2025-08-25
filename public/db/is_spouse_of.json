@@ -1,0 +1,66 @@
+[
+    {
+        "husband_id": 2,
+        "wife_id": 1
+    },
+    {
+        "husband_id": 1,
+        "wife_id": 2
+    },
+    {
+        "husband_id": 5,
+        "wife_id": 4
+    },
+    {
+        "husband_id": 4,
+        "wife_id": 5
+    },
+    {
+        "husband_id": 8,
+        "wife_id": 7
+    },
+    {
+        "husband_id": 7,
+        "wife_id": 8
+    },
+    {
+        "husband_id": 3,
+        "wife_id": 6
+    },
+    {
+        "husband_id": 6,
+        "wife_id": 3
+    },
+    {
+        "husband_id": 10,
+        "wife_id": 9
+    },
+    {
+        "husband_id": 9,
+        "wife_id": 10
+    },
+    {
+        "husband_id": 12,
+        "wife_id": 11
+    },
+    {
+        "husband_id": 11,
+        "wife_id": 12
+    },
+    {
+        "husband_id": 14,
+        "wife_id": 13
+    },
+    {
+        "husband_id": 13,
+        "wife_id": 14
+    },
+    {
+        "husband_id": 8,
+        "wife_id": 15
+    },
+    {
+        "husband_id": 15,
+        "wife_id": 8
+    }
+]

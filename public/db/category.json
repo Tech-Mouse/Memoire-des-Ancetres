@@ -1,0 +1,22 @@
+[
+    {
+        "category_id": 1,
+        "name": "Naissance"
+    },
+    {
+        "category_id": 2,
+        "name": "Mariage"
+    },
+    {
+        "category_id": 3,
+        "name": "Enfants"
+    },
+    {
+        "category_id": 4,
+        "name": "Mort"
+    },
+    {
+        "category_id": 5,
+        "name": "Notes"
+    }
+]

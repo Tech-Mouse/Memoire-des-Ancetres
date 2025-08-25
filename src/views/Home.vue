@@ -1,17 +1,16 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { getAllPeople } from "../../backend/server.js";
 
 import Hero from "@/components/Hero.vue";
 import PersonCard from "../components/PersonCard.vue";
-import PersonCardCompact from "../components/PersonCardCompact.vue";
 import Section from "../components/page/Section.vue";
 
 const people = ref([]);
 
 onMounted(async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/people");
-    people.value = await res.json();
+    people.value = await getAllPeople();
   } catch (e) {
     console.error("Error fetching people: " + e);
   }
