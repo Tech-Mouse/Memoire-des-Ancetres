@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import Text from "./page/Text.vue";
 import PersonCardCompact from "./PersonCardCompact.vue";
 
-const images = "/Memoire-des-Ancetres/src/assets/img/people/";
+const images = "/Memoire-des-Ancetres/img/people/";
 
 const props = defineProps({
   person: Object,
