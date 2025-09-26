@@ -55,7 +55,7 @@ watch(
 
 <template>
   <div v-if="person">
-    <Hero :text="person.name + ' ' + person.surname" />
+    <Hero :header="person.name + ' ' + person.surname" />
     <Section>
       <PersonDetails
         :person="person"

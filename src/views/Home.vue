@@ -18,7 +18,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Hero />
+  <Hero text="Informations concernant les personnes inhumées ici"/>
   <Section>
     <div class="person-cards">
       <PersonCard

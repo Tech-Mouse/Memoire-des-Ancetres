@@ -130,8 +130,8 @@ const dynamicFlex = computed(() => {
   &--box {
     border-right: 1px solid $secondaryColor;
     width: 80%;
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
 
     @media (max-width: $mobileTreshold) {
       border-bottom: 1px solid $secondaryColor;
