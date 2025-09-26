@@ -7,7 +7,7 @@ import Heading from "./page/Heading.vue";
 <template>
   <footer>
     <Text
-      >This page has been created in memory of all ancestors of the Seguin
+      >This page has been created in memory of all ancestors of the Hautier
       family.</Text
     >
     <Text
@@ -15,7 +15,7 @@ import Heading from "./page/Heading.vue";
       has been carefully pieced together by the loving members.</Text
     >
     <Text>Always in our hearts.</Text>
-    <Heading as="h3" pb="1">Famille Seguin</Heading>
+    <Heading as="h3" pb="1">Famille Hautier</Heading>
     <Text>© 2025</Text>
   </footer>
 </template>
