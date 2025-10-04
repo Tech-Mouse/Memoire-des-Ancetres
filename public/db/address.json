@@ -1,1 +1,9 @@
-null
+[
+    {
+        "address_id": 1,
+        "city": "La Rochelle",
+        "country": "France",
+        "house_number": 123,
+        "street": "avenue d'Athènes"
+    }
+]
