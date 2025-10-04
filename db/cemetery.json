@@ -1,1 +1,10 @@
-null
+[
+    {
+        "cemetery_id": 1,
+        "cemetery_name": "Cimetière de La Rossignolette"
+    },
+    {
+        "cemetery_id": 2,
+        "cemetery_name": "Unknown"
+    }
+]
