@@ -16,7 +16,13 @@ import Heading from "./page/Heading.vue";
     >
     <Text>Always in our hearts.</Text>
     <Heading as="h3" pb="1">Famille Hautier</Heading>
-    <Text>© 2025</Text>
+    <Text
+      >© 2025,
+      <Link href="https://github.com/Tech-Mouse" variant="nav"
+        >Creator/Documentation</Link
+      >,
+      <Link href="mailto:erkseg1@gmail.com" variant="nav">Contact</Link></Text
+    >
   </footer>
 </template>
 

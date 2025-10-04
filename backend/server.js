@@ -1,188 +1,214 @@
 export async function getAllPeople() {
-    const people = await fetch("/Memoire-des-Ancetres/db/person.json")
-    .then(res => res.json())
-    .catch(e => { console.error(e)});
-    return people;
+  const people = await fetch("/Memoire-des-Ancetres/db/person.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return people;
 }
 
 export async function getPersonById(id) {
-    const people = await getAllPeople();
-    return people.find(person => person.person_id == id);
+  const people = await getAllPeople();
+  return people.find((person) => person.person_id == id);
 }
 
 async function getCategories() {
-    const categories = await fetch("/Memoire-des-Ancetres/db/category.json")
-    .then(res => res.json())
-    .catch(e => {console.error(e)});
-    return categories;
-    
+  const categories = await fetch("/Memoire-des-Ancetres/db/category.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return categories;
 }
 
 async function getCategoryById(id) {
-    const categories = await getCategories();
-    return categories.find(category => category.category_id == id);
+  const categories = await getCategories();
+  return categories.find((category) => category.category_id == id);
 }
 
 async function getCategoryByName(name) {
-    const categories = await getCategories();
-    return categories.find(category => category.name == name);
+  const categories = await getCategories();
+  return categories.find((category) => category.name == name);
 }
 
 async function getHasCategories() {
-    const hasCategories = await fetch("/Memoire-des-Ancetres/db/has_category.json")
-    .then(res => res.json())
-    .catch(e => { console.error(e)});
-    return hasCategories;
+  const hasCategories = await fetch(
+    "/Memoire-des-Ancetres/db/has_category.json"
+  )
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return hasCategories;
 }
 
 async function getPersonHasCategories(personId) {
-    const hasCategories = await getHasCategories();
-    return hasCategories.filter(entry => entry.person_id == personId);
+  const hasCategories = await getHasCategories();
+  return hasCategories.filter((entry) => entry.person_id == personId);
 }
 
 export async function getPersonCategories(personId) {
-    const personCategories = await getPersonHasCategories(personId);
-    const categories = await getCategories();
+  const personCategories = await getPersonHasCategories(personId);
+  const categories = await getCategories();
 
-    let validCategories = [];
+  let validCategories = [];
 
-    for (const category of categories) {
-        for (const personCategory of personCategories) {
-            if (category.category_id == personCategory.category_id) {
-                validCategories.push({"category_id" : category.category_id, "name" : category.name, "text" : personCategory.text});
-            }
-        }
+  for (const category of categories) {
+    for (const personCategory of personCategories) {
+      if (category.category_id == personCategory.category_id) {
+        validCategories.push({
+          category_id: category.category_id,
+          name: category.name,
+          text: personCategory.text,
+        });
+      }
     }
-    return validCategories;
+  }
+  return validCategories;
 }
 
 async function getIsParentOf() {
-    const isParentOf = await fetch("/Memoire-des-Ancetres/db/is_parent_of.json")
-    .then(res => res.json())
-    .catch(e => { console.error(e)});
-    return isParentOf;
+  const isParentOf = await fetch("/Memoire-des-Ancetres/db/is_parent_of.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return isParentOf;
 }
 
 async function getIsParentOfPerson(personId) {
-    const personParents = await getIsParentOf();
-    return personParents.filter(entry => entry.child_id == personId);
+  const personParents = await getIsParentOf();
+  return personParents.filter((entry) => entry.child_id == personId);
 }
 
 export async function getParents(personId) {
-    const parentEntries = await getIsParentOfPerson(personId);
-    const people = await getAllPeople();
+  const parentEntries = await getIsParentOfPerson(personId);
+  const people = await getAllPeople();
 
-    let parents = [];
+  let parents = [];
 
-    for (const parentEntry of parentEntries) {
-        for (const person of people) {
-            if (parentEntry.parent_id == person.person_id) {
-                parents.push(person);
-            }
-        }
+  for (const parentEntry of parentEntries) {
+    for (const person of people) {
+      if (parentEntry.parent_id == person.person_id) {
+        parents.push(person);
+      }
     }
+  }
 
-    return parents;
+  return parents;
 }
 
 async function getIsChildOfPerson(personId) {
-    const isParent = await getIsParentOf();
-    return isParent.filter(entry => entry.parent_id == personId);
+  const isParent = await getIsParentOf();
+  return isParent.filter((entry) => entry.parent_id == personId);
 }
 
 export async function getChildren(personId) {
-    const childrenEntries = await getIsChildOfPerson(personId);
-    const people = await getAllPeople();
+  const childrenEntries = await getIsChildOfPerson(personId);
+  const people = await getAllPeople();
 
-    let children = [];
+  let children = [];
 
-    for (const childrenEntry of childrenEntries) {
-        for (const person of people) {
-            if (childrenEntry.child_id == person.person_id) {
-                children.push(person);
-            }
-        }
+  for (const childrenEntry of childrenEntries) {
+    for (const person of people) {
+      if (childrenEntry.child_id == person.person_id) {
+        children.push(person);
+      }
     }
-    return children;
+  }
+  return children;
 }
 
 async function getIsSpouseOf() {
-    const isSpouses = await fetch("/Memoire-des-Ancetres/db/is_spouse_of.json")
-    .then(res => res.json())
-    .catch(e => { console.error(e)});
-    return isSpouses;
+  const isSpouses = await fetch("/Memoire-des-Ancetres/db/is_spouse_of.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return isSpouses;
 }
 
 async function getSpouseEntriesAsWife(personId) {
-    const allSpouses = await getIsSpouseOf();
-    return allSpouses.filter(entry => entry.wife_id == personId);
+  const allSpouses = await getIsSpouseOf();
+  return allSpouses.filter((entry) => entry.wife_id == personId);
 }
 
 async function getSpouseEntriesAsHusband(personId) {
-    const allSpouses = await getIsSpouseOf();
-    return allSpouses.filter(entry => entry.husband_id == personId);
+  const allSpouses = await getIsSpouseOf();
+  return allSpouses.filter((entry) => entry.husband_id == personId);
 }
 
-
 export async function getSpouses(personId) {
-    const spousesAsWife = await getSpouseEntriesAsWife(personId);
-    const spousesAsHusband = await getSpouseEntriesAsHusband(personId);
+  const spousesAsWife = await getSpouseEntriesAsWife(personId);
+  const spousesAsHusband = await getSpouseEntriesAsHusband(personId);
 
-    const spouseIds = Array.from(spousesAsWife.map(entry => entry.husband_id));
+  const spouseIds = Array.from(spousesAsWife.map((entry) => entry.husband_id));
 
-    spouseIds.push(...spousesAsHusband.map(entry => entry.wife_id));
+  spouseIds.push(...spousesAsHusband.map((entry) => entry.wife_id));
 
-    const uniqueIds = [...new Set(spouseIds)];
+  const uniqueIds = [...new Set(spouseIds)];
 
-    const allSpouses = [];
+  const allSpouses = [];
 
-    for (const id of uniqueIds) {
-        const person = await getPersonById(id);
-        if (person) {
-            allSpouses.push(person);
-        }
+  for (const id of uniqueIds) {
+    const person = await getPersonById(id);
+    if (person) {
+      allSpouses.push(person);
     }
+  }
 
-    return allSpouses;
+  return allSpouses;
 }
 
 export async function getAllCemeteries() {
-    const cemeteries = await fetch("/Memoire-des-Ancetres/db/cemetery.json")
-    .then(res => res.json())
-    .catch(e => { console.error(e)});
-    return cemeteries;
+  const cemeteries = await fetch("/Memoire-des-Ancetres/db/cemetery.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return cemeteries;
 }
 
 export async function getCemeteryById(id) {
-    const cemeteries = await getAllCemeteries();
-    return cemeteries.find(cemetery => cemetery.cemetery_id == id);
+  const cemeteries = await getAllCemeteries();
+  return cemeteries.find((cemetery) => cemetery.cemetery_id == id);
 }
 
 async function getIsBuriedAt() {
-    const isBuriedAt = await fetch("/Memoire-des-Ancetres/db/is_buried_at.json")
-    .then(res => res.json())
-    .catch(e => { console.error(e)});
-    return isBuriedAt;
+  const isBuriedAt = await fetch("/Memoire-des-Ancetres/db/is_buried_at.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return isBuriedAt;
 }
 
 async function getIsBuriedOnCemetery(cemeteryId) {
-    const allEntries = await getIsBuriedAt();
-    return allEntries.filter(entry => entry.cemetery_id == cemeteryId);
+  const allEntries = await getIsBuriedAt();
+  return allEntries.filter((entry) => entry.cemetery_id == cemeteryId);
 }
 
 export async function getPeopleAtCemetery(cemeteryId) {
-    const people = await getAllPeople();
-    const peopleCemeteryEntries = await getIsBuriedAtCemetery();
+  const people = await getAllPeople();
+  const peopleCemeteryEntries = await getIsBuriedAtCemetery();
 
-    const buriedPeople = [];
+  const buriedPeople = [];
 
-    for (const burialEntry of peopleCemeteryEntries) {
-        for (const person of people) {
-            if (burialEntry.person_id == person.person_id) {
-                buriedPeople.push(person);
-            }
-        }
+  for (const burialEntry of peopleCemeteryEntries) {
+    for (const person of people) {
+      if (burialEntry.person_id == person.person_id) {
+        buriedPeople.push(person);
+      }
     }
+  }
 
-    return buriedPeople;
+  return buriedPeople;
+}
+
+export async function getCemeteryByPerson(personId) {
+  const isBuriedAt = await getIsBuriedAt();
+  const cemeteryId = isBuriedAt
+    .filter((entry) => entry.person_id == personId)
+    .at(0).cemetery_id;
+  return getCemeteryById(cemeteryId);
 }

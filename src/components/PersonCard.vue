@@ -1,9 +1,12 @@
 <script setup>
+import { ref, onMounted } from "vue";
+import { getCemeteryByPerson } from "../../backend/server";
 import Heading from "./page/Heading.vue";
 import Link from "./page/Link.vue";
 import Text from "./page/Text.vue";
 
 const images = "/Memoire-des-Ancetres/img/people/";
+const personCemetery = ref({});
 
 const props = defineProps({
   photo: {
@@ -25,11 +28,28 @@ const props = defineProps({
   link: {
     type: String,
   },
+  selectedCemetery: {
+    type: Number,
+  },
+});
+
+onMounted(async () => {
+  try {
+    personCemetery.value = await getCemeteryByPerson(parseInt(props.link));
+  } catch (e) {
+    console.error("Error fetching person cemetery: " + e);
+  }
 });
 </script>
 
 <template>
-  <Link :href="'/person/' + link" class="person-card">
+  <Link
+    :href="'/person/' + link"
+    class="person-card"
+    :class="{
+      'person-card--special': selectedCemetery === personCemetery.cemetery_id,
+    }"
+  >
     <img
       :src="photo || images + 'template_person.svg'"
       :alt="alt"
@@ -58,6 +78,10 @@ const props = defineProps({
 
   &:hover {
     box-shadow: 0 0 20px $shadowColor;
+  }
+
+  &--special {
+    background-color: #a9c2a7;
   }
 
   &--photo {

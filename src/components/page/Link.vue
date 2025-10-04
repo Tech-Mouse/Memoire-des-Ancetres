@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink } from "vue-router";
+import { computed } from "vue";
 
 const props = defineProps({
   href: {
@@ -11,10 +11,25 @@ const props = defineProps({
     default: "default",
   },
 });
+
+const isExternal = computed(() => {
+  return (
+    props.href.startsWith("http://") ||
+    props.href.startsWith("https://") ||
+    props.href.startsWith("mailto:")
+  );
+});
 </script>
 
 <template>
-  <router-link :to="href" :class="variant"><slot /></router-link>
+  <component
+    :is="isExternal ? 'a' : 'router-link'"
+    :to="isExternal ? null : href"
+    :href="isExternal ? href : null"
+    :target="isExternal ? '_blank' : '_self'"
+    :class="variant"
+    ><slot
+  /></component>
 </template>
 
 <style lang="scss" scoped>
