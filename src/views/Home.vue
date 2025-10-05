@@ -6,6 +6,7 @@ import Hero from "@/components/Hero.vue";
 import PersonCard from "../components/PersonCard.vue";
 import Section from "../components/page/Section.vue";
 import Select from "../components/page/Select.vue";
+import Legend from "../components/Legend.vue";
 
 const people = ref([]);
 const cemeteries = ref([]);
@@ -46,6 +47,11 @@ onMounted(async () => {
         :selectedCemetery="selectedCemetery"
       />
     </div>
+    <Legend boxColor="#a9c2a7" text="Personnes dans la tombe sélectionée" />
+    <Legend
+      boxColor="#cfb5a9"
+      text="Personnes dans les tombes non sélectionées"
+    />
   </Section>
 </template>
 
@@ -53,7 +59,6 @@ onMounted(async () => {
 .cemetery {
   &--select {
     text-align: center;
-    margin-bottom: 1.5rem;
   }
 }
 
@@ -62,5 +67,6 @@ onMounted(async () => {
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.5rem;
+  margin: 1.5rem 0;
 }
 </style>
