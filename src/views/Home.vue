@@ -40,6 +40,12 @@ watch(selectedCemetery, async (newCemeteryId) => {
       v-model="selectedCemetery"
       class="cemetery--select"
     />
+    <Legend boxColor="#a9c2a7" text="Personnes dans la tombe sélectionée" />
+    <Legend
+      boxColor="#cfb5a9"
+      text="Personnes dans les tombes non sélectionées"
+    />
+
     <div class="person-cards">
       <PersonCard
         v-for="person in people"
@@ -52,11 +58,6 @@ watch(selectedCemetery, async (newCemeteryId) => {
         :selectedCemetery="selectedCemetery"
       />
     </div>
-    <Legend boxColor="#a9c2a7" text="Personnes dans la tombe sélectionée" />
-    <Legend
-      boxColor="#cfb5a9"
-      text="Personnes dans les tombes non sélectionées"
-    />
   </Section>
 </template>
 
