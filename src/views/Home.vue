@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { getAllCemeteries, getAllPeople } from "../../backend/server.js";
+import { ref, onMounted, watch } from "vue";
+import { getAllCemeteries, getSortedPeopleByCemeteryId } from "../../backend/server.js";
 
 import Hero from "@/components/Hero.vue";
 import PersonCard from "../components/PersonCard.vue";
@@ -14,11 +14,16 @@ const selectedCemetery = ref();
 
 onMounted(async () => {
   try {
-    people.value = await getAllPeople();
+    people.value = await getSortedPeopleByCemeteryId(selectedCemetery.value);
     cemeteries.value = await getAllCemeteries();
   } catch (e) {
     console.error("Error fetching people/cemeteries: " + e);
   }
+});
+
+watch(selectedCemetery, async (newCemeteryId) => {
+  if (!newCemeteryId) return;
+  people.value = await getSortedPeopleByCemeteryId(newCemeteryId);
 });
 </script>
 

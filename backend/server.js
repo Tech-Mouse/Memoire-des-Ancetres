@@ -7,6 +7,29 @@ export async function getAllPeople() {
   return people;
 }
 
+export async function getPeopleWithCemeteries() {
+  const people = await getAllPeople();
+
+  const modifiedPeople = [];
+
+  for (const person of people) {
+    const cemetery = await getCemeteryByPerson(person.person_id);
+    person.cemetery = cemetery;
+    modifiedPeople.push(person);
+  }
+
+  return modifiedPeople;
+}
+
+export async function getSortedPeopleByCemeteryId(cemeteryId) {
+  const people = await getPeopleWithCemeteries();
+  return people.toSorted(function(a, b){
+    const aMatches = a.cemetery.cemetery_id == cemeteryId ? 1 : 0;
+    const bMatches = b.cemetery.cemetery_id == cemeteryId ? 1 : 0;
+    return bMatches - aMatches; // descending order: matches first
+  })
+}
+
 export async function getPersonById(id) {
   const people = await getAllPeople();
   return people.find((person) => person.person_id == id);
@@ -190,7 +213,7 @@ async function getIsBuriedOnCemetery(cemeteryId) {
 
 export async function getPeopleAtCemetery(cemeteryId) {
   const people = await getAllPeople();
-  const peopleCemeteryEntries = await getIsBuriedAtCemetery();
+  const peopleCemeteryEntries = await getIsBuriedOnCemetery(cemeteryId);
 
   const buriedPeople = [];
 
