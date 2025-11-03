@@ -32,7 +32,7 @@
     {
         "category_id": 3,
         "person_id": 3,
-        "text": "Jean né en 1920. Germaine était âgée de 27 ans.\nMadeleine née en 1921, Germaine avait 28 ans.\nPierre né en 1923, Germaine était alors âgée de 30 ans."
+        "text": "Jean né en 1920. Germaine était âgée de 27 ans.\nMadeleine née en 1921, Germaine avait 28 ans.\nPierre né le 3 octobre 1922, Germaine était alors âgée de 28 ans."
     },
     {
         "category_id": 4,
@@ -57,7 +57,7 @@
     {
         "category_id": 3,
         "person_id": 6,
-        "text": "Jean né le 30 avril 1920, Henri est âgé de 23 ans.\nMadeleine née le 11 juin 1921, Henri est âgé de 24 ans.\nPierre né en 1923, Henri est âgé de 26 ans.\n"
+        "text": "Jean né le 30 avril 1920, Henri est âgé de 23 ans.\nMadeleine née le 11 juin 1921, Henri est âgé de 24 ans.\nPierre né le 3 octobre 1922, Henri est âgé de 26 ans.\n"
     },
     {
         "category_id": 4,
