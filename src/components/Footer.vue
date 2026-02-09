@@ -2,6 +2,7 @@
 import Link from "./page/Link.vue";
 import Text from "./page/Text.vue";
 import Heading from "./page/Heading.vue";
+
 </script>
 
 <template>
@@ -17,7 +18,7 @@ import Heading from "./page/Heading.vue";
     <Text>Always in our hearts.</Text>
     <Heading as="h3" pb="1">Famille Hautier</Heading>
     <Text
-      >© 2025,
+      >© {{ new Date().getFullYear() }},
       <Link href="https://github.com/Tech-Mouse" variant="nav"
         >Creator/Documentation</Link
       >,
