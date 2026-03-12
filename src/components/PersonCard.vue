@@ -78,6 +78,7 @@ onMounted(async () => {
 
   &:hover {
     box-shadow: 0 0 20px $shadowColor;
+    cursor: pointer;
   }
 
   &--special {

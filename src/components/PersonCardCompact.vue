@@ -43,6 +43,7 @@ const props = defineProps({
 
   &:hover {
     box-shadow: 0 0 20px $shadowColor;
+    cursor: pointer;
 
     .person-compact-card--name {
       overflow: visible;

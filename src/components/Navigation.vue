@@ -76,6 +76,7 @@ const toggle = (event) => {
 
       &:hover {
         color: $tertiaryColor;
+        cursor: pointer;
       }
 
       &.on-left {
