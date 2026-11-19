@@ -1,3 +1,6 @@
+let allPeopleLength = 0;
+
+
 export async function getAllPeople() {
   const people = await fetch("/Memoire-des-Ancetres/db/person.json")
     .then((res) => res.json())
@@ -7,13 +10,25 @@ export async function getAllPeople() {
   return people;
 }
 
-export async function getPeopleWithCemeteries() {
-  const people = await getAllPeople();
+export async function getAllPeopleLength() {
+  if (allPeopleLength > 0) {
+    return allPeopleLength;
+  }
+  return await getAllPeople().then((people) => {
+    allPeopleLength = people.length;
+    return allPeopleLength;
+  });
+}
+
+export async function getLimitedPeopleWithCemeteries(people) {
+  const allCemeteries = await getAllCemeteries();
+  const isBuriedAt = await getIsBuriedAt();
 
   const modifiedPeople = [];
 
   for (const person of people) {
-    const cemetery = await getCemeteryByPerson(person.person_id);
+    const buriedAt = isBuriedAt.find((entry) => entry.person_id == person.person_id);
+    const cemetery = allCemeteries?.find((cemetery) => cemetery.cemetery_id == buriedAt.cemetery_id);
     person.cemetery = cemetery;
     modifiedPeople.push(person);
   }
@@ -21,13 +36,50 @@ export async function getPeopleWithCemeteries() {
   return modifiedPeople;
 }
 
-export async function getSortedPeopleByCemeteryId(cemeteryId) {
-  const people = await getPeopleWithCemeteries();
-  return people.toSorted(function(a, b){
+export async function getPeopleWithCemeteries() {
+  const people = await getAllPeople();
+  const allCemeteries = await getAllCemeteries();
+  const isBuriedAt = await getIsBuriedAt();
+
+  const modifiedPeople = [];
+
+  for (const person of people) {
+    const buriedAt = isBuriedAt.find((entry) => entry.person_id == person.person_id);
+    const cemetery = allCemeteries?.find((cemetery) => cemetery.cemetery_id == buriedAt.cemetery_id);
+    person.cemetery = cemetery;
+    modifiedPeople.push(person);
+  }
+
+  return modifiedPeople;
+}
+
+export async function getSortedPeopleByCemeteryId(cemeteryId, people) {
+  const peopleLength = await getAllPeopleLength();
+  
+  const peopleWithCemeteries = await getLimitedPeopleWithCemeteries(people);
+  let correctPeopleWithCemeteries = [];
+  if (people && people.length != peopleLength && people.length > 0) {
+    for (const person of people) {
+      for (const personWithCemetery of peopleWithCemeteries) {
+        if (person.person_id == personWithCemetery.person_id) {
+          correctPeopleWithCemeteries.push(personWithCemetery);
+        }
+      }
+    }
+    return correctPeopleWithCemeteries.toSorted(function(a, b){
+      const aMatches = a.cemetery.cemetery_id == cemeteryId ? 1 : 0;
+      const bMatches = b.cemetery.cemetery_id == cemeteryId ? 1 : 0;
+      return bMatches - aMatches; // descending order: matches first
+    })
+  }
+
+  return peopleWithCemeteries.toSorted(function(a, b){
     const aMatches = a.cemetery.cemetery_id == cemeteryId ? 1 : 0;
     const bMatches = b.cemetery.cemetery_id == cemeteryId ? 1 : 0;
     return bMatches - aMatches; // descending order: matches first
   })
+  
+  
 }
 
 export async function getPersonById(id) {
@@ -234,4 +286,67 @@ export async function getCemeteryByPerson(personId) {
     .filter((entry) => entry.person_id == personId)
     .at(0).cemetery_id;
   return getCemeteryById(cemeteryId);
+}
+
+export async function getAllFamilies() {
+  const families = await fetch("/Memoire-des-Ancetres/db/family.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return families;
+}
+
+export async function getIsMemberOf() {
+  const isMemberOf = await fetch("/Memoire-des-Ancetres/db/is_member_of.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+    return isMemberOf;
+}
+
+export async function getPeopleByFamilyId(familyId) {
+  const isMemberOf = await getIsMemberOf();
+  const people = await getAllPeople();
+
+  const familyMembers = [];
+
+  for (const memberEntry of isMemberOf) {
+    for (const person of people) {
+      if (memberEntry.family_id == familyId && memberEntry.person_id == person.person_id) {
+        familyMembers.push(person);
+      }
+    }
+  }
+  return familyMembers;
+}
+
+export async function getFamiliesByPerson(personId) {
+  const isMemberOf = await getIsMemberOf();
+  const families = isMemberOf.filter((entry) => entry.person_id == personId);
+  return families.map((entry) => getFamilyById(entry.family_id));
+}
+
+
+export async function getFamilyById(familyId) {
+  const families = await getAllFamilies();
+  return families.find((family) => family.family_id == familyId);
+}
+
+export async function getCemeteriesOfFamilies() {
+  const cemeteriesOfFamilies = await fetch("/Memoire-des-Ancetres/db/cemetery_of_family.json")
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e);
+    });
+  return cemeteriesOfFamilies;
+}
+
+export async function getCemeteriesByFamilyId(familyId) {
+  const cemeteries = await getAllCemeteries();
+  const cemeteryOfFamily = await getCemeteriesOfFamilies();
+
+  const familyCemeteries = cemeteryOfFamily.filter((entry) => entry.family_id == familyId);
+  return cemeteries.filter((cemetery) => familyCemeteries.some((entry) => entry.cemetery_id == cemetery.cemetery_id));
 }

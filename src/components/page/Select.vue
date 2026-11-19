@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 
 const props = defineProps({
   name: {
@@ -28,15 +28,17 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-const selected = ref(parseInt(props.modelValue));
+const selected = computed({
+  get() {
+    return parseInt(props.modelValue);
+  },
+  set(value) {
+    emit("update:modelValue", value);
+  },
+});
 
 onMounted(() => {
   emit("update:modelValue", parseInt(props.modelValue));
-});
-
-// Emit the selected value whenever it changes
-watch(selected, (updatedValue) => {
-  emit("update:modelValue", updatedValue);
 });
 </script>
 
