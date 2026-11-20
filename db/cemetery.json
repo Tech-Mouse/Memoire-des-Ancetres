@@ -6,5 +6,13 @@
     {
         "cemetery_id": 2,
         "cemetery_name": "Unknown/Inconnu"
+    },
+    {
+        "cemetery_id": 3,
+        "cemetery_name": "Cimetière de Mirambeau"
+    },
+    {
+        "cemetery_id": 4,
+        "cemetery_name": "Unknown/Inconnu"
     }
 ]

@@ -4,6 +4,13 @@
         "city": "La Rochelle",
         "country": "France",
         "house_number": 123,
-        "street": "avenue d'Athènes"
+        "street": "Avenue d'Athènes"
+    },
+    {
+        "address_id": 2,
+        "city": "Mirambeau",
+        "country": "France",
+        "house_number": 17150,
+        "street": "Avenue d'Aquitaine"
     }
 ]
