@@ -1,0 +1,18 @@
+[
+    {
+        "cemetery_id": 1,
+        "family_id": 1
+    },
+    {
+        "cemetery_id": 2,
+        "family_id": 1
+    },
+    {
+        "cemetery_id": 3,
+        "family_id": 2
+    },
+    {
+        "cemetery_id": 4,
+        "family_id": 2
+    }
+]
