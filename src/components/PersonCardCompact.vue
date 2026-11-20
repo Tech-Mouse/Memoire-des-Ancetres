@@ -19,11 +19,15 @@ const props = defineProps({
   link: {
     type: String,
   },
+  query: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 </script>
 
 <template>
-  <Link :href="'/person/' + link" class="person-compact-card">
+  <Link :href="'/person/' + link" :query="props.query" class="person-compact-card">
     <img
       :src="photo || images + 'template_person.svg'"
       :alt="alt"

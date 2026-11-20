@@ -10,6 +10,7 @@ import Category from "../components/Category.vue";
 
 const route = useRoute();
 const person_id = ref(route.params.person_id);
+const query = ref(route.query || {});
 
 const person = ref(null);
 const parents = ref([]);
@@ -63,6 +64,7 @@ watch(
         :spouses="spouses"
         :categories="categories"
         :children="children"
+        :query="query"
       />
     </Section>
     <Section v-if="categories && categories.length">

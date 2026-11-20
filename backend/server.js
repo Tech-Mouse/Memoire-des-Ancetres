@@ -54,32 +54,11 @@ export async function getPeopleWithCemeteries() {
 }
 
 export async function getSortedPeopleByCemeteryId(cemeteryId, people) {
-  const peopleLength = await getAllPeopleLength();
-  
-  const peopleWithCemeteries = await getLimitedPeopleWithCemeteries(people);
-  let correctPeopleWithCemeteries = [];
-  if (people && people.length != peopleLength && people.length > 0) {
-    for (const person of people) {
-      for (const personWithCemetery of peopleWithCemeteries) {
-        if (person.person_id == personWithCemetery.person_id) {
-          correctPeopleWithCemeteries.push(personWithCemetery);
-        }
-      }
-    }
-    return correctPeopleWithCemeteries.toSorted(function(a, b){
-      const aMatches = a.cemetery.cemetery_id == cemeteryId ? 1 : 0;
-      const bMatches = b.cemetery.cemetery_id == cemeteryId ? 1 : 0;
-      return bMatches - aMatches; // descending order: matches first
-    })
-  }
-
-  return peopleWithCemeteries.toSorted(function(a, b){
+  return people.toSorted(function(a, b){
     const aMatches = a.cemetery.cemetery_id == cemeteryId ? 1 : 0;
     const bMatches = b.cemetery.cemetery_id == cemeteryId ? 1 : 0;
     return bMatches - aMatches; // descending order: matches first
-  })
-  
-  
+  });
 }
 
 export async function getPersonById(id) {
@@ -349,4 +328,28 @@ export async function getCemeteriesByFamilyId(familyId) {
 
   const familyCemeteries = cemeteryOfFamily.filter((entry) => entry.family_id == familyId);
   return cemeteries.filter((cemetery) => familyCemeteries.some((entry) => entry.cemetery_id == cemetery.cemetery_id));
+}
+
+
+
+export async function getAllPeopleUltimateInfo() {
+  const people = await getAllPeople();
+  const allCemeteries = await getAllCemeteries();
+  const isBuriedAt = await getIsBuriedAt();
+  const allFamilies = await getAllFamilies();
+  const isMemberOf = await getIsMemberOf();
+
+  let modifiedPeople = [];
+
+  for (const person of people) {
+    const buriedAt = isBuriedAt.find((entry) => entry.person_id == person.person_id);
+    const cemetery = allCemeteries?.find((cemetery) => cemetery.cemetery_id == buriedAt.cemetery_id);
+    const isMember = isMemberOf.find((entry) => entry.person_id == person.person_id);
+    const family = allFamilies?.find((family) => family.family_id == isMember.family_id);
+
+    person.cemetery = cemetery;
+    person.family = family;
+    modifiedPeople.push(person);
+  }
+  return modifiedPeople;
 }

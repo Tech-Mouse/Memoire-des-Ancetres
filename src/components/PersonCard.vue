@@ -28,6 +28,10 @@ const props = defineProps({
   link: {
     type: String,
   },
+  query: {
+    type: Object,
+    default: () => ({}),
+  },
   selectedCemetery: {
     type: Number,
   },
@@ -45,6 +49,7 @@ onMounted(async () => {
 <template>
   <Link
     :href="'/person/' + link"
+    :query="props.query"
     class="person-card"
     :class="{
       'person-card--special': selectedCemetery === personCemetery.cemetery_id,

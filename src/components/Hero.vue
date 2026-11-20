@@ -13,14 +13,14 @@ const props = defineProps({
   },
   text: {
     type: String,
-  }
+  },
 });
 </script>
 
 <template>
   <section class="hero">
     <div class="hero--contents">
-      <Heading as="h1" class="hero--contents--page-head">{{ header }}</Heading>
+      <Heading as="h1" class="hero--contents--page-head">{{  header }}</Heading>
       <Heading as="h3" v-if="text" class="hero--contents--text">{{ text }}</Heading>
     </div>
   </section>

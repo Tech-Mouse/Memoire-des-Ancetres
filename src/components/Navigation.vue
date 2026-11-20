@@ -1,29 +1,27 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { ref, watch } from "vue";
+
 import Link from "./page/Link.vue";
 import Heading from "./page/Heading.vue";
 
-const people = ref([]);
+const route = useRoute();
 
-onMounted(async () => {
-  // try {
-  //   const res = await fetch("http://localhost:3000/api/people");
-  //   people.value = await res.json();
-  // } catch (e) {
-  //   console.error("Error fetching people: " + e);
-  // }
-});
+const query = ref(route.query.family || "hautier");
 
-const show = ref(false);
+watch(
+  () => route.query,
+  (newQuery) => {
+    if (query.value !== "hautier" && ! newQuery.family) return;
+    query.value = newQuery.family || "hautier";
+  }
+);
 
-const toggle = (event) => {
-  show.value = !show.value;
-};
 </script>
 
 <template>
   <nav :class="{ open: show }" class="navbar">
-    <Link href="/" class="navbar--logo">
+    <Link :href="`/${query}`" class="navbar--logo">
       <Heading as="h1" innerClass="navbar--logo--house">⌂</Heading>
     </Link>
 

@@ -3,7 +3,8 @@ import Home from "@/views/Home.vue";
 import ViewPerson from "@/views/ViewPerson.vue";
 
 const routes = [
-  { path: "/", component: Home },
+  { path: "/", redirect: "/hautier" },
+  { path: "/:family_name", component: Home },
   { path: "/person/:person_id", component: ViewPerson, props: true },
 ];
 

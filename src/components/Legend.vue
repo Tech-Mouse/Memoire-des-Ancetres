@@ -1,4 +1,7 @@
 <script setup>
+
+import Text from "./page/Text.vue";
+
 const props = defineProps({
   boxColor: {
     type: String,

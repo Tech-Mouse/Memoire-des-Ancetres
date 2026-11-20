@@ -11,6 +11,7 @@ const props = defineProps({
   spouses: Array,
   children: Array,
   categories: Array,
+  query: Object,
 });
 
 const dynamicFlex = computed(() => {
@@ -31,6 +32,7 @@ const dynamicFlex = computed(() => {
           alt=""
           :name="oneInstance.name + ' ' + oneInstance.surname"
           :link="oneInstance.person_id.toString()"
+          :query="props.query"
         />
       </div>
       <Text v-else>Pas d'information sur les parents</Text>
@@ -79,6 +81,7 @@ const dynamicFlex = computed(() => {
             alt=""
             :name="oneInstance.name + ' ' + oneInstance.surname"
             :link="oneInstance.person_id.toString()"
+            :query="props.query"
           />
         </div>
       </div>
@@ -94,6 +97,7 @@ const dynamicFlex = computed(() => {
           alt=""
           :name="oneInstance.name + ' ' + oneInstance.surname"
           :link="oneInstance.person_id.toString()"
+          :query="props.query"
         />
       </div>
     </div>

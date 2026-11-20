@@ -10,6 +10,10 @@ const props = defineProps({
     type: String,
     default: "default",
   },
+  query: {
+    type: Object,
+    default: () => ({}),
+  }
 });
 
 const isExternal = computed(() => {
@@ -24,7 +28,7 @@ const isExternal = computed(() => {
 <template>
   <component
     :is="isExternal ? 'a' : 'router-link'"
-    :to="isExternal ? null : href"
+    :to="isExternal ? null : { path: href, query: props.query }"
     :href="isExternal ? href : null"
     :target="isExternal ? '_blank' : '_self'"
     :class="variant"
