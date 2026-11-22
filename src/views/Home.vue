@@ -151,7 +151,7 @@ watch(
   <Section class="selectors">
     <Select
       name="families"
-      label="Famille"
+      label="Choix de la famille"
       :options="families"
       valueKey="family_id"
       labelKey="family_name"
@@ -161,7 +161,7 @@ watch(
     />
     <Select
       name="cemeteries"
-      label="Cimetière"
+      label="Choix du cimetière"
       :options="cemeteries"
       valueKey="cemetery_id"
       labelKey="cemetery_name"
